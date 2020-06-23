@@ -1,8 +1,10 @@
 /*
  * BaseFunctions.h
  *
- *  Created on: Jun 15, 2020
- *      Author: Florian Lungu
+ * Author: Florian Lungu
+ *
+ * Version History:
+ * 2020-Jun-15 Initial creation
  */
 
 #include <string>

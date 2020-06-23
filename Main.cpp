@@ -1,9 +1,9 @@
 /* Author: Florian Lungu
  *
  * Description:
- * This c++ code reads data from Golden Cheetah default export file
- * golden_cheetah_export.csv and workouts.csv from TrainingPeaks.com then
- * exports the data I want to a new csv file so that I can easily copy
+ * This C++ code reads data from the Golden Cheetah default export file
+ * golden_cheetah_export.csv and TrainingPeaks.com export file workouts.csv
+ * then writes the data I want to a new csv file so that I can easily copy
  * and paste into my annual cycling log Excel file
  *
  * Version History:
