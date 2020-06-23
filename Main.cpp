@@ -71,7 +71,8 @@ int main() {
 		column_find_date,
 		column_title,
 		column_my_comments,
-		parse_start;
+		parse_left,
+		parse_right;
 
 	string field_title,
 		field_my_comments,
@@ -104,7 +105,7 @@ int main() {
 			} else if (param=="cycling_log_import") {
 				cycling_log_import = ReplaceAll(val, "\\", "\\\\");
 			} else if (param=="trainingpeaks_lastname") {
-				trainingpeaks_lastname = ReplaceAll(val, "\\", "\\\\");
+				trainingpeaks_lastname = ReplaceAll(val, ":", "") + ":";
 			}
 		}
 		settings_file.close();
@@ -252,9 +253,17 @@ int main() {
 									field_title = tp_row[column_title];
 									field_my_comments = tp_row[column_my_comments];
 									if (field_my_comments.length() > 0) {
-										field_my_comments = field_my_comments.substr(1,field_my_comments.length()-2);
-										parse_start = field_my_comments.find(trainingpeaks_lastname)+trainingpeaks_lastname.length()+1;
-										field_my_comments = field_my_comments.substr(parse_start,field_my_comments.length()-parse_start);
+										size_t pos = field_my_comments.find(trainingpeaks_lastname);
+										vector<size_t> vec;
+										while(pos != string::npos) {
+											parse_left = field_my_comments.find("*");
+											parse_right = field_my_comments.find(trainingpeaks_lastname)+trainingpeaks_lastname.length()+1;
+											field_my_comments = field_my_comments.substr(0,parse_left) + " " +
+													field_my_comments.substr(parse_right,field_my_comments.length()-parse_right);
+											pos = field_my_comments.find(trainingpeaks_lastname);
+											//pos =data.find(toSearch, pos + toSearch.size());
+										}
+										field_my_comments = trim(field_my_comments.substr(1,field_my_comments.length()-2));
 									} else {
 										field_my_comments = "";
 									}
