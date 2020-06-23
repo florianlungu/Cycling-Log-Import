@@ -105,7 +105,7 @@ int main() {
 			} else if (param=="cycling_log_import") {
 				cycling_log_import = ReplaceAll(val, "\\", "\\\\");
 			} else if (param=="trainingpeaks_lastname") {
-				trainingpeaks_lastname = ReplaceAll(val, ":", "") + ":";
+				trainingpeaks_lastname = trim(ReplaceAll(val, ":", "")) + ":";
 			}
 		}
 		settings_file.close();
@@ -302,6 +302,3 @@ int main() {
 	Sleep(3000); // wait 3 seconds to close the window
 	return 0;
 }
-
-
-
