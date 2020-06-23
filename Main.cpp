@@ -17,14 +17,10 @@
 #include <vector>
 
 #include <string>
-#include <utility> // pair
 #include <stdexcept> // runtime_error
-#include <sstream> // stringstream
+#include <sstream>
 #include <istream>
-#include <map>
-#include <algorithm>
 #include <cmath>
-#include <codecvt>
 #include <windows.h>
 
 using namespace std;
@@ -49,45 +45,49 @@ int main() {
 	string trainingpeaks_lastname = "";
 	ifstream settings_file;
 
-	// gc file
+	// csv files
 	const char *bom = "\xef\xbb\xbf";
 	ifstream gc_file, tp_file;
 	ofstream cl_file;
 	vector<string> gc_row, tp_row;
-	int rownum = 1, rownum_tp = 1, tcount = 0, this_row, last_row;
+	int rownum = 1,
+		rownum_tp = 1,
+		tcount = 0,
+		this_row,
+		last_row;
 
+	// columns and fields
 	int column_distance,
-	column_moving_time,
-	column_elevation_gain,
-	column_TSS,
-	column_hrTSS,
-	column_IF,
-	column_hrIF,
-	column_np,
-	column_temp,
-	column_avg_hr ,
-	column_max_hr,
-	column_find_date,
-	column_title,
-	column_my_comments,
-	parse_start;
+		column_moving_time,
+		column_elevation_gain,
+		column_TSS,
+		column_hrTSS,
+		column_IF,
+		column_hrIF,
+		column_np,
+		column_temp,
+		column_avg_hr ,
+		column_max_hr,
+		column_find_date,
+		column_title,
+		column_my_comments,
+		parse_start;
 
 	string field_title,
-	field_my_comments,
-	field_date,
-	field_distance,
-	field_moving_time,
-	field_elevation_gain,
-	field_TSS,
-	field_IF,
-	field_np,
-	field_temp,
-	field_avg_hr,
-	field_max_hr,
-	field_date_raw,
-	field_mph,
-	find_date,
-	output_line;
+		field_my_comments,
+		field_date,
+		field_distance,
+		field_moving_time,
+		field_elevation_gain,
+		field_TSS,
+		field_IF,
+		field_np,
+		field_temp,
+		field_avg_hr,
+		field_max_hr,
+		field_date_raw,
+		field_mph,
+		find_date;
 
 	// get file locations from ini file
 	settings_file.open("Cycling Log Import Settings.ini");
