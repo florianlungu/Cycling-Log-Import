@@ -255,13 +255,12 @@ int main() {
 									if (field_my_comments.length() > 0) {
 										size_t pos = field_my_comments.find(trainingpeaks_lastname);
 										vector<size_t> vec;
-										while(pos != string::npos) {
+										while (pos != string::npos) {
 											parse_left = field_my_comments.find("*");
 											parse_right = field_my_comments.find(trainingpeaks_lastname)+trainingpeaks_lastname.length()+1;
 											field_my_comments = field_my_comments.substr(0,parse_left) + " " +
 													field_my_comments.substr(parse_right,field_my_comments.length()-parse_right);
 											pos = field_my_comments.find(trainingpeaks_lastname);
-											//pos =data.find(toSearch, pos + toSearch.size());
 										}
 										field_my_comments = trim(field_my_comments.substr(1,field_my_comments.length()-2));
 									} else {
@@ -276,17 +275,17 @@ int main() {
 					}
 
 					// output row to cycling_log_import file
-					cl_file << "\"" << field_date << "\"" << ',';
-					cl_file << "\"" << field_title << "\"" << ',' << ',' << ',';
-					cl_file << "\"" << field_distance << "\"" << ',';
-					cl_file << "\"" << field_moving_time << "\"" << ',';
-					cl_file << "\"" << field_elevation_gain << "\"" << ',';
-					cl_file << "\"" << field_TSS << "\"" << ',';
-					cl_file << "\"" << field_IF << "\"" << ',';
-					cl_file << "\"" << field_np << "\"" << ',';
-					cl_file << "\"" << field_avg_hr << "\"" << ',';
-					cl_file << "\"" << field_max_hr << "\"" << ',';
-					cl_file << "\"" << field_temp << "\"" << ',';
+					cl_file << "\"" << field_date << "\"" << ",";
+					cl_file << "\"" << field_title << "\"" << "," << "," << ",";
+					cl_file << "\"" << field_distance << "\"" << ",";
+					cl_file << "\"" << field_moving_time << "\"" << ",";
+					cl_file << "\"" << field_elevation_gain << "\"" << ",";
+					cl_file << "\"" << field_TSS << "\"" << ",";
+					cl_file << "\"" << field_IF << "\"" << ",";
+					cl_file << "\"" << field_np << "\"" << ",";
+					cl_file << "\"" << field_avg_hr << "\"" << ",";
+					cl_file << "\"" << field_max_hr << "\"" << ",";
+					cl_file << "\"" << field_temp << "\"" << ",";
 					cl_file << "\"" << field_my_comments << "\"" << endl;
 		    }
 		    rownum++;
@@ -300,7 +299,7 @@ int main() {
 	}
 
 	cout << "Program completed successfully!!" << endl;
-	Sleep(3000);
+	Sleep(3000); // wait 3 seconds to close the window
 	return 0;
 }
 
