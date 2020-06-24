@@ -111,20 +111,28 @@ int main() {
 		settings_file.close();
 	} else {
 		cout << "There was an error opening \'Cycling Log Import Settings.ini\' file" << endl;
+		Sleep(3000); // wait 3 seconds to close the window
+		return 0;
 	}
 
 	// open csv files
 	gc_file.open(golden_cheetah_export);
 	if (!gc_file) {
 		cout << "There was an error opening golden_cheetah_export file" << endl;
+		Sleep(3000); // wait 3 seconds to close the window
+		return 0;
 	}
 	tp_file.open(trainingpeaks_export);
 	if (!tp_file) {
 		cout << "There was an error opening trainingpeaks_export file" << endl;
+		Sleep(3000); // wait 3 seconds to close the window
+		return 0;
 	}
 	cl_file.open(cycling_log_import);
 	if (!cl_file) {
 		cout << "There was an error opening cycling_log_import file" << endl;
+		Sleep(3000); // wait 3 seconds to close the window
+		return 0;
 	} else {
 		cl_file << bom;
 	}
