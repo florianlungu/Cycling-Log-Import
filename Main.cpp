@@ -250,7 +250,7 @@ int main() {
 							find_date = tp_row[column_find_date];
 							if (find_date == field_date) {
 								if (this_row > last_row) {
-									field_title = tp_row[column_title];
+									field_title = ReplaceAll(tp_row[column_title],"\"","\"\"");
 									field_my_comments = tp_row[column_my_comments];
 									if (field_my_comments.length() > 0) {
 										size_t pos = field_my_comments.find(trainingpeaks_lastname);
@@ -262,7 +262,7 @@ int main() {
 													field_my_comments.substr(parse_right,field_my_comments.length()-parse_right);
 											pos = field_my_comments.find(trainingpeaks_lastname);
 										}
-										field_my_comments = trim(field_my_comments.substr(1,field_my_comments.length()-2));
+										field_my_comments = ReplaceAll(trim(field_my_comments.substr(1,field_my_comments.length()-2)),"\"","\"\"");
 									} else {
 										field_my_comments = "";
 									}
