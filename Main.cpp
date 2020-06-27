@@ -242,7 +242,7 @@ int main() {
 
 						// figure out column numbers from the first row
 						if (rownum_tp==1) {
-							for (auto &element : tp_row) {
+							for (auto& element : tp_row) {
 								if (element=="WorkoutDay") {
 									column_find_date = tcount;
 								} else if (element=="Title") {
