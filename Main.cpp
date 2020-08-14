@@ -8,6 +8,7 @@
  *
  * Version History:
  * 2020-Jun-13 Initial creation
+ * 2020-Aug-14 Added distance comparison for when there are two workouts in one day
  *
  */
 
@@ -71,6 +72,7 @@ int main() {
 		column_find_date,
 		column_title,
 		column_my_comments,
+		column_tp_distance,
 		parse_left,
 		parse_right;
 
@@ -88,7 +90,8 @@ int main() {
 		field_max_hr,
 		field_date_raw,
 		field_mph,
-		find_date;
+		find_date,
+		field_tp_distance;
 
 	// get file locations from ini file
 	settings_file.open("Cycling Log Import Settings.ini");
@@ -249,6 +252,8 @@ int main() {
 									column_title = tcount;
 								} else if (element=="AthleteComments") {
 									column_my_comments = tcount;
+								} else if (element=="DistanceInMeters") {
+									column_tp_distance = tcount;
 								}
 								tcount++;
 							}
@@ -256,7 +261,8 @@ int main() {
 						// parse columns for data
 						} else {
 							find_date = tp_row[column_find_date];
-							if (find_date == field_date) {
+							field_tp_distance = patch::to_string(round(stof(tp_row[column_tp_distance])*0.621371/100)/10);
+							if (find_date == field_date && field_distance == field_tp_distance) {
 								if (this_row > last_row) {
 									field_title = ReplaceAll(tp_row[column_title],"\"","\"\"");
 									field_my_comments = tp_row[column_my_comments];
@@ -274,7 +280,8 @@ int main() {
 									} else {
 										field_my_comments = "";
 									}
-									// cout << "field_my_comments is " << field_my_comments << endl;
+									// cout << "field_my_comments is " << field_title << field_my_comments << endl;
+									// cout << "distance is " <<  field_distance << " tp dist is " << field_tp_distance << endl;
 									last_row = this_row;
 								}
 							}
