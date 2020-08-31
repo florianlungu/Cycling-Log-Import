@@ -230,7 +230,7 @@ int main() {
 						field_max_hr = gc_row[column_max_hr];
 					}
 
-					// loop through trainingpeaks file and find the row with the same date
+					// loop through trainingpeaks file and find the row with the same date and distance
 					tcount = 0;
 					this_row = 0;
 					last_row = 0;
@@ -261,7 +261,11 @@ int main() {
 						// parse columns for data
 						} else {
 							find_date = tp_row[column_find_date];
-							field_tp_distance = patch::to_string(round(stof(tp_row[column_tp_distance])*0.621371/100)/10);
+							if (tp_row[column_tp_distance] != "") {
+								field_tp_distance = patch::to_string(round(stof(tp_row[column_tp_distance])*0.621371/100)/10);
+							} else {
+								field_tp_distance = "0";
+							}
 							if (find_date == field_date && field_distance == field_tp_distance) {
 								if (this_row > last_row) {
 									field_title = ReplaceAll(tp_row[column_title],"\"","\"\"");
@@ -280,7 +284,7 @@ int main() {
 									} else {
 										field_my_comments = "";
 									}
-									// cout << "field_my_comments is " << field_title << field_my_comments << endl;
+									// cout << "field_my_comments is " << field_title << field_my_comments  << endl;
 									// cout << "distance is " <<  field_distance << " tp dist is " << field_tp_distance << endl;
 									last_row = this_row;
 								}
