@@ -2,13 +2,13 @@
  *
  * Description:
  * This C++ code reads data from the Golden Cheetah default export file
- * golden_cheetah_export.csv and TrainingPeaks.com export file workouts.csv
- * then writes the data I want to a new csv file so that I can easily copy
- * and paste into my annual cycling log Excel file
+ * golden_cheetah_export.csv then writes the data I want to a new csv file so that
+ * I can easily copy and paste into my annual cycling log Excel file
  *
  * Version History:
  * 2020-Jun-13 Initial creation
  * 2020-Aug-14 Added distance comparison for when there are two workouts in one day
+ * 2020-Nov-12 Removed TrainingPeaks code
  *
  */
 
@@ -23,6 +23,7 @@
 #include <istream>
 #include <cmath>
 #include <windows.h>
+#include <ctime>
 
 using namespace std;
 
@@ -40,10 +41,8 @@ namespace patch
 int main() {
 	// settings from ini file
 	string line, line_tp, word, param, val, temp;
-	string trainingpeaks_export = "";
 	string golden_cheetah_export = "";
 	string cycling_log_import = "";
-	string trainingpeaks_lastname = "";
 	ifstream settings_file;
 
 	// csv files
@@ -52,10 +51,7 @@ int main() {
 	ofstream cl_file;
 	vector<string> gc_row, tp_row;
 	int rownum = 1,
-		rownum_tp = 1,
-		tcount = 0,
-		this_row,
-		last_row;
+		tcount = 0;
 
 	// columns and fields
 	int column_distance,
@@ -68,17 +64,9 @@ int main() {
 		column_np,
 		column_temp,
 		column_avg_hr ,
-		column_max_hr,
-		column_find_date,
-		column_title,
-		column_my_comments,
-		column_tp_distance,
-		parse_left,
-		parse_right;
+		column_max_hr;
 
-	string field_title,
-		field_my_comments,
-		field_date,
+	string field_date,
 		field_distance,
 		field_moving_time,
 		field_elevation_gain,
@@ -90,8 +78,12 @@ int main() {
 		field_max_hr,
 		field_date_raw,
 		field_mph,
-		find_date,
-		field_tp_distance;
+		this_year_str,
+		row_date_str;
+
+    std::time_t t = std::time(0);
+    std::tm* now = std::localtime(&t);
+    this_year_str = patch::to_string(now->tm_year + 1900) + "/01/01";
 
 	// get file locations from ini file
 	settings_file.open("Cycling Log Import Settings.ini");
@@ -101,14 +93,10 @@ int main() {
 			param = trim(line.substr(0, line.find("=")));
 			val = trim(line.substr(line.find("=")+1, line.length()-line.find("=")-1));
 
-			if (param=="trainingpeaks_export") {
-				trainingpeaks_export = ReplaceAll(val, "\\", "\\\\");
-			} else if (param=="golden_cheetah_export") {
+			if (param=="golden_cheetah_export") {
 				golden_cheetah_export = ReplaceAll(val, "\\", "\\\\");
 			} else if (param=="cycling_log_import") {
 				cycling_log_import = ReplaceAll(val, "\\", "\\\\");
-			} else if (param=="trainingpeaks_lastname") {
-				trainingpeaks_lastname = trim(ReplaceAll(val, ":", "")) + ":";
 			}
 		}
 		settings_file.close();
@@ -122,12 +110,6 @@ int main() {
 	gc_file.open(golden_cheetah_export);
 	if (!gc_file) {
 		cout << "There was an error opening golden_cheetah_export file" << endl;
-		Sleep(3000); // wait 3 seconds to close the window
-		return 0;
-	}
-	tp_file.open(trainingpeaks_export);
-	if (!tp_file) {
-		cout << "There was an error opening trainingpeaks_export file" << endl;
 		Sleep(3000); // wait 3 seconds to close the window
 		return 0;
 	}
@@ -185,11 +167,6 @@ int main() {
 			}
 
 		    if (rownum>1) {
-
-				// training peaks fields
-				field_title = "";
-				field_my_comments = "";
-
 				// golden cheetah fields
 				field_date = "";
 				field_distance = "";
@@ -203,99 +180,33 @@ int main() {
 				field_max_hr = "";
 
 				field_date_raw = gc_row[0];
-				field_date = "20"+field_date_raw.substr(6,2)+"-"+field_date_raw.substr(0,2)+"-"+field_date_raw.substr(3,2);
+				row_date_str = "20"+field_date_raw.substr(6,2)+"/"+field_date_raw.substr(0,2)+"/"+field_date_raw.substr(3,2);
 
-				if (stof(gc_row[column_distance]) > 0) {
-					field_distance = patch::to_string(round(stof(gc_row[column_distance])*0.621371*10)/10);
-					field_moving_time = patch::to_string(int(stof(gc_row[column_moving_time])/60));
-					if (field_distance != "0" && field_moving_time != "0") {
-						field_mph = patch::to_string(stof(field_distance)/stof(field_moving_time)*60);
-					} else {
-						field_mph = "";
-					}
-					field_elevation_gain = patch::to_string(round(stof(gc_row[column_elevation_gain])*3.28084));
-					if (gc_row[column_np] != "0") {
-						field_np = patch::to_string(ceil(stof(gc_row[column_np])));
-						field_IF = patch::to_string(round(stof(gc_row[column_IF])*100)/100);
-						field_TSS = patch::to_string(round(stof(gc_row[column_TSS])));
-					}
-					if (field_IF == "") {
-						field_IF = patch::to_string(round(stof(gc_row[column_hrIF])*100)/100);
-						field_TSS = patch::to_string(round(stof(gc_row[column_hrTSS])));
-					}
-					if (stof(gc_row[column_temp]) > -20) {
-						field_temp = patch::to_string(round((stof(gc_row[column_temp]) * 9/5 + 32)));
+				if (this_year_str <= row_date_str) {
+					field_date = "20"+field_date_raw.substr(6,2)+"-"+field_date_raw.substr(0,2)+"-"+field_date_raw.substr(3,2);
+
+					if (stof(gc_row[column_distance]) > 0) {
+						field_distance = patch::to_string(round(stof(gc_row[column_distance])*0.621371*10)/10);
+						field_moving_time = patch::to_string(int(stof(gc_row[column_moving_time])/60));
+						field_elevation_gain = patch::to_string(round(stof(gc_row[column_elevation_gain])*3.28084));
+						if (gc_row[column_np] != "0") {
+							field_np = patch::to_string(ceil(stof(gc_row[column_np])));
+							field_IF = patch::to_string(round(stof(gc_row[column_IF])*100)/100);
+							field_TSS = patch::to_string(round(stof(gc_row[column_TSS])));
 						}
+						if (field_IF == "") {
+							field_IF = patch::to_string(round(stof(gc_row[column_hrIF])*100)/100);
+							field_TSS = patch::to_string(round(stof(gc_row[column_hrTSS])));
+						}
+						if (stof(gc_row[column_temp]) > -20) {
+							field_temp = patch::to_string(round((stof(gc_row[column_temp]) * 9/5 + 32)));
+							}
 						field_avg_hr = patch::to_string(round(stof(gc_row[column_avg_hr])));
 						field_max_hr = gc_row[column_max_hr];
 					}
 
-					// loop through trainingpeaks file and find the row with the same date and distance
-					tcount = 0;
-					this_row = 0;
-					last_row = 0;
-					rownum_tp = 1;
-					tp_file.clear();
-					tp_file.seekg(0);
-					line_tp = "";
-					while (getline(tp_file,line_tp)) {
-						this_row++;
-						tp_row.clear();
-						tp_row = CsvlinePopulate(line_tp,",");
-
-						// figure out column numbers from the first row
-						if (rownum_tp==1) {
-							for (auto& element : tp_row) {
-								if (element=="WorkoutDay") {
-									column_find_date = tcount;
-								} else if (element=="Title") {
-									column_title = tcount;
-								} else if (element=="AthleteComments") {
-									column_my_comments = tcount;
-								} else if (element=="DistanceInMeters") {
-									column_tp_distance = tcount;
-								}
-								tcount++;
-							}
-
-						// parse columns for data
-						} else {
-							find_date = tp_row[column_find_date];
-							if (tp_row[column_tp_distance] != "") {
-								field_tp_distance = patch::to_string(round(stof(tp_row[column_tp_distance])*0.621371/100)/10);
-							} else {
-								field_tp_distance = "0";
-							}
-							if (find_date == field_date && field_distance == field_tp_distance) {
-								if (this_row > last_row) {
-									field_title = ReplaceAll(tp_row[column_title],"\"","\"\"");
-									field_my_comments = tp_row[column_my_comments];
-									if (field_my_comments.length() > 0) {
-										size_t pos = field_my_comments.find(trainingpeaks_lastname);
-										vector<size_t> vec;
-										while (pos != string::npos) {
-											parse_left = field_my_comments.find("*");
-											parse_right = field_my_comments.find(trainingpeaks_lastname)+trainingpeaks_lastname.length()+1;
-											field_my_comments = field_my_comments.substr(0,parse_left) + " " +
-													field_my_comments.substr(parse_right,field_my_comments.length()-parse_right);
-											pos = field_my_comments.find(trainingpeaks_lastname);
-										}
-										field_my_comments = ReplaceAll(trim(field_my_comments.substr(1,field_my_comments.length()-2)),"\"","\"\"");
-									} else {
-										field_my_comments = "";
-									}
-									// cout << "field_my_comments is " << field_title << field_my_comments  << endl;
-									// cout << "distance is " <<  field_distance << " tp dist is " << field_tp_distance << endl;
-									last_row = this_row;
-								}
-							}
-						}
-						rownum_tp++;
-					}
-
 					// output row to cycling_log_import file
 					cl_file << "\"" << field_date << "\"" << ",";
-					cl_file << "\"" << field_title << "\"" << "," << "," << ",";
 					cl_file << "\"" << field_distance << "\"" << ",";
 					cl_file << "\"" << field_moving_time << "\"" << ",";
 					cl_file << "\"" << field_elevation_gain << "\"" << ",";
@@ -304,8 +215,8 @@ int main() {
 					cl_file << "\"" << field_np << "\"" << ",";
 					cl_file << "\"" << field_avg_hr << "\"" << ",";
 					cl_file << "\"" << field_max_hr << "\"" << ",";
-					cl_file << "\"" << field_temp << "\"" << ",";
-					cl_file << "\"" << field_my_comments << "\"" << endl;
+					cl_file << "\"" << field_temp << "\"" << endl;
+				}
 		    }
 		    rownum++;
 		}

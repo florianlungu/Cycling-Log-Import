@@ -43,7 +43,6 @@ vector<string> CsvlinePopulate(string line, string delimiter)
 	int linepos=0;
 	bool inquotes=false;
 	string c;
-	//int i;
 	int linemax=line.length();
 	string curstring;
 	record.clear();
