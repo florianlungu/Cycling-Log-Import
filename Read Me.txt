@@ -1,4 +1,29 @@
-I use this file as a template to enter feedback after a workout. Its convient since its online.
-I'll create a new file for each year (Cycling Log 2021). At the end of each month, It's easy to copy and paste the data from here into my local Excel file. 
+I like to download all my GPS fit files and keep an Excel journal of metrics and feedback.
 
-https://docs.google.com/spreadsheets/d/1XjO22Tc2bvWY_Bis6dgRbtB9DUeT1xQZ2Il5GddlK5I/edit?usp=sharing
+
+1. [Annual] Create an annual plan in Excel
+	> Open Cycling Log 2020.xlsx
+	> Update bike list in worksheet Charts A23-A26
+	> Update starting values in worksheet Charts X2-X8
+	> Copy values from worksheet Plan column B into Ride Log column C
+	> Where needed, replace workouts in Ride Log column C with 3 day combo of Rest Day / Race Prep / Race
+
+2. [Annual] Copy calendar from Excel to Google Sheet > Cycling Log 2020
+	> Open Cycling Log 2020.xlsx
+	> Copy Calendar Flat A2-E367 to Google Sheet > Ride Log
+	> Copy Calendar A2-I107 to Google Sheet > Calendar
+	> Update bike list in Data Choices
+
+3. [Daily] Update Google Sheet > Ride Log > Columns Bike, Type, & Notes
+	I use this file as a template to enter feedback after a workout. Its convient since its online.
+	I'll create a new file for each year (Cycling Log 2020). At the end of each month, It's easy to copy and 
+	paste the data from here into my local Excel file. 
+
+	https://docs.google.com/spreadsheets/d/1XjO22Tc2bvWY_Bis6dgRbtB9DUeT1xQZ2Il5GddlK5I/edit?usp=sharing
+
+4. [Monthly] Update Excel Cycling Log.xlsx
+	> Copy Google Sheet > Ride Log > Columns Bike, Type, & Notes into Excel > Ride Log
+	> I will hide a month on the Ride Log and Calendar sheets once its past
+	> Open Golden Cheetah, click on Tools > Export Metrics as CSV 
+	> Run Cycling Log Import.exe
+	> Open in Excel cycling_log_import.csv and copy columns A to J into Cycling Log 2020.xlsx > Data columns B to K
