@@ -24,6 +24,7 @@
 #include <cmath>
 #include <windows.h>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -43,6 +44,7 @@ int main() {
 	string line, line_tp, word, param, val, temp;
 	string golden_cheetah_export = "";
 	string cycling_log_import = "";
+	string just_this_year = "";
 	ifstream settings_file;
 
 	// csv files
@@ -97,6 +99,9 @@ int main() {
 				golden_cheetah_export = ReplaceAll(val, "\\", "\\\\");
 			} else if (param=="cycling_log_import") {
 				cycling_log_import = ReplaceAll(val, "\\", "\\\\");
+			} else if (param=="just_this_year") {
+				just_this_year = ReplaceAll(val, "\\", "\\\\");
+				transform(just_this_year.begin(), just_this_year.end(), just_this_year.begin(), ::toupper);
 			}
 		}
 		settings_file.close();
@@ -182,7 +187,7 @@ int main() {
 				field_date_raw = gc_row[0];
 				row_date_str = "20"+field_date_raw.substr(6,2)+"/"+field_date_raw.substr(0,2)+"/"+field_date_raw.substr(3,2);
 
-				if (this_year_str <= row_date_str) {
+				if (this_year_str <= row_date_str || just_this_year != "YES") {
 					field_date = "20"+field_date_raw.substr(6,2)+"-"+field_date_raw.substr(0,2)+"-"+field_date_raw.substr(3,2);
 
 					if (stof(gc_row[column_distance]) > 0) {
